@@ -14,7 +14,10 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@bm/common-ui": ["libs/common-ui/src/index.ts"],
+      "@bm/currency": ["libs/currency/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
