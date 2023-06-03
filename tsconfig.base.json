@@ -15,7 +15,9 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@bm/app-config": ["lib/app-config/index.ts"],
       "@bm/common-ui": ["libs/common-ui/src/index.ts"],
+      "@bm/core": ["libs/core/src/index.ts"],
       "@bm/currency": ["libs/currency/src/index.ts"]
     }
   },

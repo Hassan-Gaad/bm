@@ -3,9 +3,10 @@ import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { appRoutes } from './app.routes';
-import {HttpClientModule} from '@angular/common/http';
+import {HttpClientModule,HTTP_INTERCEPTORS} from '@angular/common/http';
 import { HeaderComponent } from '@bm/common-ui';
-
+import { APP_ENVIRONMENT,AuthInterceptor } from '@bm/core';
+import {environment} from './environment/environment';
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -14,7 +15,10 @@ import { HeaderComponent } from '@bm/common-ui';
     HttpClientModule,
     HeaderComponent
   ],
-  providers: [],
+  providers: [
+    {provide:APP_ENVIRONMENT,useValue:environment},
+    {provide:HTTP_INTERCEPTORS, useClass:AuthInterceptor,multi:true}
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

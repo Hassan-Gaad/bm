@@ -36,6 +36,12 @@
               "maximumError": "4kb"
             }
           ],
+          "fileReplacements": [
+            {
+              "replace": "apps/currency-exchanger/src/environments/environment.ts",
+              "with": "apps/currency-exchanger/src/environments/environment.prod.ts"
+            }
+          ],
           "outputHashing": "all"
         },
         "development": {

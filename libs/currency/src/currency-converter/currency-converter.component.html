@@ -1,1 +1,34 @@
-<p>currency-converter works!</p>
+<form [formGroup]="form" (submit)="convertCurrency()">
+  <div class="amount-rate">
+    <div class="amount-control">
+      <label for="amount">Amount</label>
+      <input formControlName="amount" type="text" id="amount">
+      <ng-container *ngIf="form.get('amount')?.errors as errors">
+        <div class="error" *ngIf="errors['required']">Required</div>
+      </ng-container>
+    </div>
+    <p class="exchange-rate">
+      1 {{form.get('from')?.value}} = {{rate||'XX.XX'}} {{form.get('to')?.value}}
+    </p>
+  </div>
+  <div class="from-to">
+    <div [formGroup]="form" class="lists">
+      <select class="form" formControlName="from">
+        <option *ngFor="let symbol of symbols |keyvalue" [value]="symbol.key"
+          [disabled]="form.get('to')?.value===symbol.key">{{symbol.key}}</option>
+      </select>
+      <mat-icon svgIcon="swap_horiz" (click)="swapCurrencies()"></mat-icon>
+      <select class="to" formControlName="to">
+        <option *ngFor="let symbol of symbols | keyvalue" [value]="symbol.key"
+          [disabled]="form.get('from')?.value===symbol.key">{{symbol.key}}</option>
+      </select>
+    </div>
+    <button type="submit">Convert</button>
+    <div class="result-details">
+      <p>{{result||'XX.XX'}} {{form.get('to')?.value}}</p>
+      <a *ngIf="!baseCurrency" [ngStyle]="{'pointer-events': form.get('amount')?.valid?'auto':'none'}"
+        [routerLink]="['details',{fullName:symbols[form.get('from')?.value],symbol:form.get('from')?.value}]">More
+        Details</a>
+    </div>
+  </div>
+</form>

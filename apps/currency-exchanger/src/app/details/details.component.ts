@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'bm-details',
@@ -8,4 +9,8 @@ import { CommonModule } from '@angular/common';
   templateUrl: './details.component.html',
   styleUrls: ['./details.component.scss'],
 })
-export class DetailsComponent {}
+export class DetailsComponent {
+  constructor(private router:Router){
+    const data=router.getCurrentNavigation()?.extras.state;
+  }
+}

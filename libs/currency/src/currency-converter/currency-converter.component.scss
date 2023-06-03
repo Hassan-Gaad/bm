@@ -1,0 +1,50 @@
+:host {
+  form {
+    @apply flex flex-wrap mx-32 md:mx-4 sm:mx-3;
+    .amount-rate {
+      @apply flex flex-col justify-between items-center mx-2 xs:mx-0 font-semibold text-base;
+      flex: 1 0 40%;
+      .amount-control {
+        @apply flex flex-col items-start w-full;
+        label {
+          @apply text-gray-600 mb-1;
+        }
+        input {
+          @apply w-full rounded-sm border border-gray-500 p-2 font-normal;
+        }
+        .error{
+          @apply text-sm text-rose-500;
+        }
+      }
+      .exchange-rate {
+        @apply w-full rounded-sm p-3 border border-gray-400;
+      }
+    }
+    .from-to {
+      @apply flex flex-col;
+      flex: 1 0 55%;
+      .lists {
+        @apply flex justify-evenly items-center;
+        select {
+          @apply flex-1 text-white px-5 py-2 rounded-lg bg-zinc-600;
+        }
+        mat-icon {
+          @apply mx-4 cursor-pointer text-lg border border-black rounded-md min-w-[3rem] min-h-[2.2rem] hover:bg-cyan-900 hover:text-white;
+        }
+      }
+      button {
+        @apply w-full p-2 font-normal text-lg text-white my-3 rounded bg-cyan-900;
+      }
+      .result-details {
+        @apply flex items-center justify-center;
+        p {
+          @apply p-4 text-base text-center font-semibold border border-gray-500 flex-1;
+          margin-inline-end: 0.75rem;
+        }
+        a {
+          @apply flex items-center py-1 px-12 md:px-6 text-white font-normal text-lg bg-cyan-900 rounded-lg;
+        }
+      }
+    }
+  }
+}

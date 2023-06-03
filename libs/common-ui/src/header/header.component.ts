@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatIconModule } from '@angular/material/icon';
-import { MatIconRegistry } from '@angular/material/icon';
+import { MatIconModule ,MatIconRegistry} from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 
