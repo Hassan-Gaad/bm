@@ -3,7 +3,7 @@ export interface LatestModel {
   timestamp: number
   base: string
   date: string
-  rates: any
+  rates: Record<string,string>
 }
 export interface ExchangeUiModel{
   base:string,
@@ -11,4 +11,6 @@ export interface ExchangeUiModel{
   amount:number,
   result:string
 }
+
+export type HistoryModel = LatestModel
 

@@ -3,7 +3,8 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { QueryModel } from '../interfaces/currency-convert.model';
 import { APP_ENVIRONMENT } from '@bm/core';
-import { LatestModel } from '../interfaces/currency-latest.model';
+import { HistoryModel, LatestModel } from '../interfaces/currency-latest.model';
+import { symbols } from '../const/symbols-list';
 @Injectable({
   providedIn: 'root',
 })
@@ -13,19 +14,16 @@ export class CurrencyService {
     @Inject(APP_ENVIRONMENT) private environemnt: any
   ) {}
   convertCurrency(query: QueryModel): Observable<LatestModel> {
-    // const url = `${this.environemnt.baseUrl}convert`;
-    // const params = new HttpParams()
-    //   .set('from', query.from)
-    //   .set('to', query.to)
-    //   .set('amount', query.amount);
-    /**
-     * instead of creating multiple api call
-     * we gonna get lates of every pupular currency
-     */
     const url = `${this.environemnt.baseUrl}latest`;
     const params = new HttpParams()
       .set('base', query.from)
-      .set('symbols', query.to)
+      .set('symbols', query.to);
     return this.http.get<LatestModel>(url, { params });
+  }
+
+  getCurrencyHistory(date: string, base: string, target: string):Observable<HistoryModel> {
+    const url = `${this.environemnt.baseUrl}/${date}`;
+    const params = new HttpParams().set('base', base).set('symbols', target);
+    return this.http.get<HistoryModel>(url, { params });
   }
 }
