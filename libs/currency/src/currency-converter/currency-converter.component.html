@@ -17,18 +17,18 @@
         <option *ngFor="let symbol of symbols |keyvalue" [value]="symbol.key"
           [disabled]="form.get('to')?.value===symbol.key">{{symbol.key}}</option>
       </select>
-      <mat-icon svgIcon="swap_horiz" (click)="swapCurrencies()"></mat-icon>
+      <mat-icon svgIcon="swap_horiz" (click)="swapCurrencies()" [ngStyle]="{'opacity':!!this.baseCurrency?0.5:1}"></mat-icon>
       <select class="to" formControlName="to">
         <option *ngFor="let symbol of symbols | keyvalue" [value]="symbol.key"
           [disabled]="form.get('from')?.value===symbol.key">{{symbol.key}}</option>
       </select>
     </div>
-    <button type="submit">Convert</button>
+    <button [disabled]="form.invalid" type="submit">Convert</button>
     <div class="result-details">
       <p>{{result||'XX.XX'}} {{form.get('to')?.value}}</p>
-      <a *ngIf="!baseCurrency" [ngStyle]="{'pointer-events': form.get('amount')?.valid?'auto':'none'}"
-        [routerLink]="['details',{fullName:symbols[form.get('from')?.value],symbol:form.get('from')?.value}]">More
-        Details</a>
+      <button *ngIf="!baseCurrency" [ngStyle]="{'pointer-events': form.get('amount')?.valid?'auto':'none'}"
+        (click)="navigateToDetails()">More
+        Details</button>
     </div>
   </div>
 </form>

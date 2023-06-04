@@ -41,8 +41,8 @@
           @apply p-4 text-base text-center font-semibold border border-gray-500 flex-1;
           margin-inline-end: 0.75rem;
         }
-        a {
-          @apply flex items-center py-1 px-12 md:px-6 text-white font-normal text-lg bg-cyan-900 rounded-lg;
+        button {
+          @apply flex items-center py-1 px-12 md:px-6 text-white font-normal text-lg bg-cyan-900 rounded-lg cursor-pointer;
         }
       }
     }

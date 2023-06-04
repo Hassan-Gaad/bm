@@ -7,7 +7,7 @@ import {
   OnDestroy,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import {
   ReactiveFormsModule,
@@ -30,9 +30,10 @@ import { NumbersOnlyFormControl } from '@bm/core';
   styleUrls: ['./currency-converter.component.scss'],
 })
 export class CurrencyConverterComponent implements OnInit, OnDestroy {
-  form: FormGroup;
+  form!: FormGroup;
   @Input() baseCurrency!: string;
   @Input() targetCurrency!: string;
+  @Input() amount!: number;
   @Output() response = new EventEmitter<ExchangeUiModel[]>();
   symbols = symbols;
   subs!: Subscription;
@@ -41,22 +42,23 @@ export class CurrencyConverterComponent implements OnInit, OnDestroy {
   constructor(
     iconRegistry: MatIconRegistry,
     sanitizer: DomSanitizer,
-    private currencyService: CurrencyService
+    private currencyService: CurrencyService,
+    private router: Router
   ) {
     iconRegistry.addSvgIcon(
       'swap_horiz',
       sanitizer.bypassSecurityTrustResourceUrl('./assets/images/swap_horiz.svg')
     );
+  }
+  ngOnInit(): void {
     this.form = new FormGroup({
       from: new FormControl({
         value: this.baseCurrency || 'EUR',
         disabled: !!this.baseCurrency,
       }),
       to: new FormControl(this.targetCurrency || 'USD'),
-      amount: new NumbersOnlyFormControl(1, Validators.required),
+      amount: new NumbersOnlyFormControl(this.amount || 1, Validators.required),
     });
-  }
-  ngOnInit(): void {
     this.subs = this.form.controls['amount'].valueChanges.subscribe((value) => {
       if (!value) {
         this.form.get('from')?.disable();
@@ -66,7 +68,7 @@ export class CurrencyConverterComponent implements OnInit, OnDestroy {
         this.form.get('to')?.enable();
       }
     });
-    this.subs = this.form.controls['from'].valueChanges.subscribe((value) => {
+    this.subs = this.form.controls['from'].valueChanges.subscribe(() => {
       this.rate = '';
       this.result = '';
     });
@@ -75,37 +77,53 @@ export class CurrencyConverterComponent implements OnInit, OnDestroy {
       this.result = '';
     });
   }
-
+  navigateToDetails() {
+    this.router.navigate(
+      [
+        'details',
+        { from: this.form.get('from')?.value, to: this.form.get('to')?.value },
+      ],
+      {
+        state: {
+          fullName: symbols[this.form.get('from')?.value],
+          amount: this.form.get('amount')?.value,
+        },
+      }
+    );
+  }
   convertCurrency() {
     if (this.form.valid) {
       this.subs = this.currencyService
         .convertCurrency(this.form.value)
         .pipe(
           tap((value) => {
-            this.rate = parseFloat(value.rates[this.form.value.to]).toFixed(2);
-            this.result = (
-              this.form.value.amount *
-              parseFloat(value.rates[this.form.value.to])
-            ).toFixed(2);
+            if(value.success){
+              this.rate = parseFloat(value.rates[this.form.value.to]).toFixed(2);
+              this.result = (
+                this.form.value.amount *
+                parseFloat(value.rates[this.form.value.to])
+              ).toFixed(2);
 
-            const popularCurrData: ExchangeUiModel[] = [];
-            Object.entries(value.rates).forEach((rate) => {
-              popularCurrData.push({
-                base: value.base,
-                target: rate[0],
-                amount: this.form.value.amount,
-                result: (
-                  this.form.value.amount * parseFloat(JSON.stringify(rate[1]))
-                ).toFixed(2),
+              const popularCurrData: ExchangeUiModel[] = [];
+              Object.entries(value.rates).forEach((rate) => {
+                popularCurrData.push({
+                  base: value.base,
+                  target: rate[0],
+                  amount: this.form.value.amount,
+                  result: (
+                    this.form.value.amount * parseFloat(JSON.stringify(rate[1]))
+                  ).toFixed(2),
+                });
               });
-            });
-            this.response.emit(popularCurrData);
+              this.response.emit(popularCurrData);
+            }
           })
         )
         .subscribe(noop);
     }
   }
   swapCurrencies() {
+    if (this.baseCurrency) return;
     const baseCurrency = this.form.get('from')?.value;
     const targetCurrency = this.form.get('to')?.value;
 
