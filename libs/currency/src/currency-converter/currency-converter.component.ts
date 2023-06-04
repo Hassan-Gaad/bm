@@ -37,8 +37,8 @@ export class CurrencyConverterComponent implements OnInit, OnDestroy {
   @Output() response = new EventEmitter<ExchangeUiModel[]>();
   symbols = symbols;
   subs!: Subscription;
-  rate!: string;
-  result!: string;
+  @Input() rate!: string;
+  @Input() result!: string;
   constructor(
     iconRegistry: MatIconRegistry,
     sanitizer: DomSanitizer,
@@ -63,8 +63,10 @@ export class CurrencyConverterComponent implements OnInit, OnDestroy {
       if (!value) {
         this.form.get('from')?.disable();
         this.form.get('to')?.disable();
-      } else {
+      } else if (value && !this.baseCurrency) {
         this.form.get('from')?.enable();
+        this.form.get('to')?.enable();
+      } else if (value && this.baseCurrency) {
         this.form.get('to')?.enable();
       }
     });
@@ -87,6 +89,8 @@ export class CurrencyConverterComponent implements OnInit, OnDestroy {
         state: {
           fullName: symbols[this.form.get('from')?.value],
           amount: this.form.get('amount')?.value,
+          rate: this.rate,
+          result: this.result,
         },
       }
     );
@@ -94,11 +98,13 @@ export class CurrencyConverterComponent implements OnInit, OnDestroy {
   convertCurrency() {
     if (this.form.valid) {
       this.subs = this.currencyService
-        .convertCurrency(this.form.value)
+        .convertCurrency(this.form.getRawValue())
         .pipe(
           tap((value) => {
-            if(value.success){
-              this.rate = parseFloat(value.rates[this.form.value.to]).toFixed(2);
+            if (value.success) {
+              this.rate = parseFloat(value.rates[this.form.value.to]).toFixed(
+                2
+              );
               this.result = (
                 this.form.value.amount *
                 parseFloat(value.rates[this.form.value.to])
@@ -123,12 +129,13 @@ export class CurrencyConverterComponent implements OnInit, OnDestroy {
     }
   }
   swapCurrencies() {
-    if (this.baseCurrency) return;
+    if (this.baseCurrency || this.form.get('amount')?.invalid) return;
     const baseCurrency = this.form.get('from')?.value;
     const targetCurrency = this.form.get('to')?.value;
 
     this.form.get('from')?.setValue(targetCurrency);
     this.form.get('to')?.setValue(baseCurrency);
+    this.response.emit(undefined);
   }
   ngOnDestroy(): void {
     this.subs.unsubscribe();

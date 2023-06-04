@@ -1,12 +1,17 @@
 :host{
   @apply flex justify-between p-4 items-center bg-[#ECF1F9] shadow;
   mat-icon{
-    @apply w-16 h-16 mx-8 sm:mx-1 min-w-[3rem];
+    @apply w-12 h-16 mx-8 sm:mx-1;
   }
   .routes{
     @apply flex flex-wrap justify-end ;
     a{
-      @apply p-3  mx-4 sm:m-1 text-lg sm:text-sm  bg-green-400 text-white font-semibold sm:font-normal rounded-lg;
+      @apply p-2  mx-4 sm:m-1 text-base sm:text-sm  bg-cyan-900 text-white font-semibold sm:font-normal rounded;
     }
+  }
+}
+:host ::ng-deep {
+  path{
+    @apply fill-cyan-600;
   }
 }

@@ -1,7 +1,7 @@
 :host{
-  @apply flex flex-col m-8;
+  @apply flex flex-col m-8 sm:m-0;
   .info{
-    @apply flex items-center justify-between;
+    @apply flex items-center justify-between m-3 ;
     span{
       @apply text-lg font-semibold;
     }
@@ -10,9 +10,9 @@
     }
   }
   bm-currency-converter{
-    @apply my-8 sm:m-4 py-8 shadow-md rounded-lg;
+    @apply my-8 sm:m-0 py-8 shadow-md rounded-lg;
   }
   bm-currency-chart{
-    @apply mt-8 rounded-lg border;
+    @apply mt-8 rounded-lg border xs:w-max;
   }
 }

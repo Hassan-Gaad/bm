@@ -1,5 +1,5 @@
 import { Route } from '@angular/router';
-import { detailsResolver } from './details/details.resolver';
+import { DetailsResolver } from './details/details.resolver';
 
 export const appRoutes: Route[] = [
   {
@@ -8,7 +8,7 @@ export const appRoutes: Route[] = [
   },
   {
     path: 'details',
-    resolve:{data:detailsResolver},
+    resolve:{data:DetailsResolver},
     loadComponent: () =>
       import('./details/details.component').then((m) => m.DetailsComponent),
   },

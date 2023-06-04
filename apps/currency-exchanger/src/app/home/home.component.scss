@@ -1,0 +1,17 @@
+:host{
+  @apply flex flex-col m-8 sm:m-1;
+  bm-currency-converter{
+    @apply my-8 sm:m-1 py-8 shadow-md rounded-lg;
+
+  }
+  p{
+    @apply text-lg font-bold text-gray-800 m-4 ;
+  }
+  .popular-currencies{
+    @apply grid gap-1 grid-cols-3;
+
+    .exchange-rate{
+      @apply flex p-6 sm:p-3 rounded border shadow-md;
+    }
+  }
+}

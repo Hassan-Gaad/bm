@@ -56,7 +56,7 @@ export class CurrencyChartComponent implements OnInit {
   constructor(private currency: CurrencyService) {}
   ngOnInit(): void {
     const datesList = this.months.map((month, index) => {
-      return this.getDateOfLastDay(2022, index);
+      return this.getDateOfLastDay(2022, index+1);
     });
     const ratesHistory$ = datesList.map((date) => {
       return this.currency

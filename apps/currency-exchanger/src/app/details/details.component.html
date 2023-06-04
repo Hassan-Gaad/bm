@@ -1,8 +1,8 @@
 <ng-container *ngIf="actRoute.params|async as params">
   <div class="info">
-    <span>{{params['from']}}{{' - '}}{{state['fullName']}}</span>
+    <span>{{params['from']}}{{' - '}}{{state['fullName']||''}}</span>
     <a [routerLink]="['/']" >Back to home</a>
   </div>
-  <bm-currency-converter [amount]="state['amount']" [baseCurrency]="params['from']" [targetCurrency]="params['to']"></bm-currency-converter>
+  <bm-currency-converter [rate]="state['rate']" [result]="state['result']" [amount]="state['amount']" [baseCurrency]="params['from']" [targetCurrency]="params['to']"></bm-currency-converter>
   <bm-currency-chart [base]="params['from']" [target]="params['to']"></bm-currency-chart>
 </ng-container>

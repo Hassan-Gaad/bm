@@ -1,1 +1,14 @@
-<bm-currency-converter></bm-currency-converter>
+<bm-currency-converter (response)="currExchangeRates=$event"></bm-currency-converter>
+
+<ng-container *ngIf="currExchangeRates">
+  <p>Popular currencies :</p>
+  <div class="popular-currencies">
+    <ng-container *ngTemplateOutlet="exchangeRate; context:{exchangeData:currExchangeRates}"></ng-container>
+
+    <ng-template #exchangeRate let-exchangeRates="exchangeData">
+      <div *ngFor="let exchangeRate of exchangeRates" class="exchange-rate">
+        {{exchangeRate.amount}}{{exchangeRate.base}}{{' = '}}{{exchangeRate.result}}{{exchangeRate.target}}
+      </div>
+    </ng-template>
+  </div>
+</ng-container>

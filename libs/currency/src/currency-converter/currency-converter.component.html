@@ -26,7 +26,7 @@
     <button [disabled]="form.invalid" type="submit">Convert</button>
     <div class="result-details">
       <p>{{result||'XX.XX'}} {{form.get('to')?.value}}</p>
-      <button *ngIf="!baseCurrency" [ngStyle]="{'pointer-events': form.get('amount')?.valid?'auto':'none'}"
+      <button *ngIf="!baseCurrency" [disabled]="form.get('amount')?.invalid"
         (click)="navigateToDetails()">More
         Details</button>
     </div>

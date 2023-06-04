@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { QueryModel } from '../interfaces/currency-convert.model';
 import { APP_ENVIRONMENT } from '@bm/core';
 import { HistoryModel, LatestModel } from '../interfaces/currency-latest.model';
-import { symbols } from '../const/symbols-list';
 @Injectable({
   providedIn: 'root',
 })
@@ -15,9 +14,10 @@ export class CurrencyService {
   ) {}
   convertCurrency(query: QueryModel): Observable<LatestModel> {
     const url = `${this.environemnt.baseUrl}latest`;
+    const popularCurr='AUD,AUD,PLN,PLN,ALL,AFN,EGP,NZD'
     const params = new HttpParams()
       .set('base', query.from)
-      .set('symbols', query.to);
+      .set('symbols', query.to+','+popularCurr);
     return this.http.get<LatestModel>(url, { params });
   }
 

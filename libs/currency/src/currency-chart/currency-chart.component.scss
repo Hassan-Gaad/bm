@@ -1,3 +1,6 @@
 :host{
   @apply flex items-center justify-center;
+  canvas{
+    @apply w-[90vw];
+  }
 }
