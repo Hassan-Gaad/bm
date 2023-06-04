@@ -2,7 +2,8 @@ import {
   ChangeDetectionStrategy,
   Component,
   Input,
-  OnInit,
+  OnChanges,
+  SimpleChanges,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgChartsModule } from 'ng2-charts';
@@ -18,10 +19,11 @@ import { Observable, forkJoin, map, tap } from 'rxjs';
   styleUrls: ['./currency-chart.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CurrencyChartComponent implements OnInit {
-  @Input() base='EUR';
-  @Input() target='USD';
+export class CurrencyChartComponent implements OnChanges {
+  @Input() base = 'EUR';
+  @Input() target = 'USD';
   rates$!: Observable<number[]>;
+  datesList!: string[];
 
   months = [
     'January',
@@ -42,7 +44,7 @@ export class CurrencyChartComponent implements OnInit {
     datasets: [
       {
         data: [],
-        label:this.base,
+        label: this.base,
         fill: true,
         tension: 0.5,
         borderColor: 'black',
@@ -53,27 +55,37 @@ export class CurrencyChartComponent implements OnInit {
   public lineChartOptions: ChartOptions<'line'> = {
     responsive: false,
   };
-  constructor(private currency: CurrencyService) {}
-  ngOnInit(): void {
-    const datesList = this.months.map((month, index) => {
-      return this.getDateOfLastDay(2022, index+1);
+  constructor(private currency: CurrencyService) {
+    this.datesList = this.months.map((month, index) => {
+      return this.getDateOfLastDay(2022, index + 1);
     });
-    const ratesHistory$ = datesList.map((date) => {
+  }
+
+  ngOnChanges(): void {
+    this.updateRatesHistory();
+  }
+
+  updateRatesHistory() {
+    const ratesHistory$ = this.datesList.map((date) => {
       return this.currency
         .getCurrencyHistory(date, this.base, this.target)
         .pipe(
           map((currencyHistory) => {
-            return parseFloat(currencyHistory.rates[this.target]);
+            if (currencyHistory.success) {
+              return parseFloat(currencyHistory.rates[this.target]);
+            } else {
+              return -1;
+            }
           })
         );
     });
     this.rates$ = forkJoin(ratesHistory$).pipe(
       tap((rates) => {
-        this.lineChartData.datasets[0].data = rates;
+        this.lineChartData.datasets[0].data = rates.filter((rate) => rate > 0);
       })
     );
 
-    this.lineChartData.datasets[0].label=this.base;
+    this.lineChartData.datasets[0].label = this.base+" - "+this.target;
   }
   getDateOfLastDay(year: number, month: number) {
     return new Date(new Date(year, month, 1).valueOf() - 1)

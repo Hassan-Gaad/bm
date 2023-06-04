@@ -5,7 +5,7 @@
   }
   .routes{
     @apply flex flex-wrap justify-end ;
-    a{
+    button{
       @apply p-2  mx-4 sm:m-1 text-base sm:text-sm  bg-cyan-900 text-white font-semibold sm:font-normal rounded;
     }
   }

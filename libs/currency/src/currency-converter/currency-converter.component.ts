@@ -2,9 +2,11 @@ import {
   Component,
   Input,
   Output,
+  OnChanges,
   EventEmitter,
   OnInit,
   OnDestroy,
+  SimpleChanges,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
@@ -29,7 +31,9 @@ import { NumbersOnlyFormControl } from '@bm/core';
   templateUrl: './currency-converter.component.html',
   styleUrls: ['./currency-converter.component.scss'],
 })
-export class CurrencyConverterComponent implements OnInit, OnDestroy {
+export class CurrencyConverterComponent
+  implements OnInit, OnChanges, OnDestroy
+{
   form!: FormGroup;
   @Input() baseCurrency!: string;
   @Input() targetCurrency!: string;
@@ -49,16 +53,14 @@ export class CurrencyConverterComponent implements OnInit, OnDestroy {
       'swap_horiz',
       sanitizer.bypassSecurityTrustResourceUrl('./assets/images/swap_horiz.svg')
     );
+
+    this.form = new FormGroup({
+      from: new FormControl('EUR'),
+      to: new FormControl('USD'),
+      amount: new NumbersOnlyFormControl(1, Validators.required),
+    });
   }
   ngOnInit(): void {
-    this.form = new FormGroup({
-      from: new FormControl({
-        value: this.baseCurrency || 'EUR',
-        disabled: !!this.baseCurrency,
-      }),
-      to: new FormControl(this.targetCurrency || 'USD'),
-      amount: new NumbersOnlyFormControl(this.amount || 1, Validators.required),
-    });
     this.subs = this.form.controls['amount'].valueChanges.subscribe((value) => {
       if (!value) {
         this.form.get('from')?.disable();
@@ -78,6 +80,15 @@ export class CurrencyConverterComponent implements OnInit, OnDestroy {
       this.rate = '';
       this.result = '';
     });
+    this.convertCurrency();
+  }
+  ngOnChanges(): void {
+    this.form.get('from')?.setValue(this.baseCurrency);
+    !!this.baseCurrency && this.form.get('from')?.disable();
+
+    this.form.get('to')?.setValue(this.targetCurrency);
+    this.form.get('amount')?.setValue(this.amount||1);
+    this.convertCurrency();
   }
   navigateToDetails() {
     this.router.navigate(
