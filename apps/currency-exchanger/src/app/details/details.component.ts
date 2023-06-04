@@ -18,9 +18,8 @@ import {
   styleUrls: ['./details.component.scss'],
 })
 export class DetailsComponent {
-  state:Record<string,any>;
+  state:Record<string,any>|undefined;
   constructor( route: Router, public actRoute:ActivatedRoute) {
-     this.state = route.getCurrentNavigation()?.extras.state as Record<string, any>;
-     console.log(route.getCurrentNavigation()?.extras);
+     this.state = route.getCurrentNavigation()?.extras.state;
   }
 }
