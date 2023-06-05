@@ -12,7 +12,6 @@ export class HomeComponent {
     return this._currExchangeRates;
   }
   set currExchangeRates(value:ExchangeUiModel[]){
-    console.log(value);
     this._currExchangeRates=value;
   }
 }

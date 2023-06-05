@@ -6,7 +6,6 @@ import {
   EventEmitter,
   OnInit,
   OnDestroy,
-  SimpleChanges,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
@@ -39,6 +38,7 @@ export class CurrencyConverterComponent
   @Input() targetCurrency!: string;
   @Input() amount!: number;
   @Output() response = new EventEmitter<ExchangeUiModel[]>();
+  @Output() targetCurrencyChange=new EventEmitter<string>();
   symbols = symbols;
   subs!: Subscription;
   @Input() rate!: string;
@@ -76,9 +76,10 @@ export class CurrencyConverterComponent
       this.rate = '';
       this.result = '';
     });
-    this.subs = this.form.controls['to'].valueChanges.subscribe(() => {
+    this.subs = this.form.controls['to'].valueChanges.subscribe((value) => {
       this.rate = '';
       this.result = '';
+      this.targetCurrencyChange.emit(value);
     });
     this.convertCurrency();
   }
