@@ -1,5 +1,5 @@
 export const environment={
   baseUrl:'http://data.fixer.io/api/',
   production:false,
-  access_key : '195cec0ad0a9915add48b91acdd443f7'
+  access_key : '5bdea439c5e6f284cdabcb10538e3efc'
 }
