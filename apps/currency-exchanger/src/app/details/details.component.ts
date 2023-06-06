@@ -20,16 +20,15 @@ import { map } from 'rxjs';
   styleUrls: ['./details.component.scss'],
 })
 export class DetailsComponent {
-  state:Record<string,any>|undefined;
-  constructor( route: Router, public actRoute:ActivatedRoute) {
-     this.state = route.getCurrentNavigation()?.extras.state;
+  state: Record<string, any> | undefined;
+  params: Record<string, any> | undefined;
+  constructor(route: Router, public actRoute: ActivatedRoute) {
+    this.state = route.getCurrentNavigation()?.extras.state;
+    actRoute.params.subscribe((params) => {
+      this.params = params;
+    });
   }
-
-  set targetCurrencyChange(value:string){
-    this.actRoute.params=this.actRoute.params.pipe(
-      map((params)=>{
-        return {...params,to:value}
-      })
-    )
+  set targetCurrencyChange(value: string) {
+    this.params = { ...this.params, to: value };
   }
 }
